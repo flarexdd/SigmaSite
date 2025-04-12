@@ -1,3 +1,4 @@
+/* Base Styling */
 body {
   font-family: Arial, sans-serif;
   background: #181818;
@@ -6,6 +7,8 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  margin: 0;
+  overflow: hidden;
 }
 
 .container {
@@ -14,26 +17,76 @@ body {
   border-radius: 10px;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   text-align: center;
+  z-index: 1;
+  position: relative;
 }
 
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Button Style */
 button {
   padding: 12px 20px;
-  background: #3498db;
-  border: none;
+  background: black;
+  border: 2px solid white;
   color: white;
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 15px;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background: #2980b9;
+  background: white;
+  color: black;
+  transform: scale(1.05);
 }
 
+/* Result Box */
 #keyResult {
   margin-top: 20px;
   font-size: 16px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  word-break: break-word;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#keyResult.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#keyResult p {
+  margin: 0;
+}
+
+#keyResult p strong {
+  color: #2ecc71;
+}
+
+/* Error State */
+#keyResult.error {
+  background-color: #3a1c1c;
+  border-color: #e74c3c;
+  color: #ffb3b3;
+}
+
+/* Particles Background */
+#tsparticles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
