@@ -29,23 +29,29 @@ h1 {
 }
 
 /* Button Style */
+ 
+/* Button Style */
 button {
   padding: 12px 20px;
-  background: black;
-  border: 2px solid white;
+  background: #555;  /* Gray color */
+  border: 2px solid #333;  /* Darker gray border */
   color: white;
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 15px;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);  /* Subtle shadow */
 }
 
 button:hover {
-  background: white;
-  color: black;
+  background: #666;  /* Slightly lighter gray when hovered */
+  color: white;
+  border-color: #333;
   transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);  /* Shadow gets bigger on hover */
 }
+
 
 /* Result Box */
 #keyResult {
