@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Get Your Key</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Get Your License Key</h1>
+    
+    <form id="keyForm">
+      <!-- Cloudflare Turnstile -->
+      <div class="cf-turnstile" data-sitekey="YOUR_SITE_KEY_HERE"></div>
+
+      <button type="submit">Get Key</button>
+    </form>
+
+    <div id="keyResult"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('keyForm');
+    const resultDiv = document.getElementById('keyResult');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const token = document.querySelector('input[name="cf-turnstile-response"]').value;
+
+      const response = await fetch('/api/get-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        resultDiv.innerHTML = `<p><strong>Your Key:</strong> ${data.key}</p>`;
+      } else {
+        resultDiv.innerHTML = `<p style="color:red;">${data.message}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
