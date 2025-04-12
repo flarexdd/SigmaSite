@@ -6,15 +6,18 @@
   <title>Get Your Key</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 </head>
 <body>
+  <!-- Particles Background -->
+  <div id="tsparticles"></div>
+
   <div class="container">
     <h1>Get Your License Key</h1>
     
     <form id="keyForm">
       <!-- Cloudflare Turnstile -->
       <div class="cf-turnstile" data-sitekey="0x4AAAAAABKMNOeY5BVYa0ST"></div>
-
       <button type="submit">Get Key</button>
     </form>
 
@@ -27,23 +30,79 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      resultDiv.className = ''; // Reset class
+      resultDiv.innerHTML = '';
 
-      const token = document.querySelector('input[name="cf-turnstile-response"]').value;
+      const tokenInput = document.querySelector('input[name="cf-turnstile-response"]');
+      const token = tokenInput ? tokenInput.value : '';
 
-      const response = await fetch('/api/get-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token })
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        resultDiv.innerHTML = `<p><strong>Your Key:</strong> ${data.key}</p>`;
-      } else {
-        resultDiv.innerHTML = `<p style="color:red;">${data.message}</p>`;
+      if (!token) {
+        resultDiv.className = 'error show';
+        resultDiv.innerHTML = `<p>Please complete the CAPTCHA before proceeding.</p>`;
+        return;
       }
+
+      resultDiv.innerHTML = `<p>Verifying, please wait...</p>`;
+      resultDiv.classList.add('show');
+
+      try {
+        const response = await fetch('/api/get-key', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          resultDiv.className = 'show';
+          resultDiv.innerHTML = `<p><strong>Your Key:</strong> ${data.key}</p>`;
+        } else {
+          resultDiv.className = 'error show';
+          resultDiv.innerHTML = `<p>${data.message}</p>`;
+        }
+      } catch (error) {
+        resultDiv.className = 'error show';
+        resultDiv.innerHTML = `<p>An error occurred while trying to get the key.</p>`;
+      }
+    });
+
+    // tsParticles Config
+    tsParticles.load("tsparticles", {
+      background: { color: "#181818" },
+      fpsLimit: 60,
+      interactivity: {
+        events: {
+          onHover: { enable: true, mode: "repulse" },
+          resize: true
+        },
+        modes: {
+          repulse: { distance: 100, duration: 0.4 }
+        }
+      },
+      particles: {
+        color: { value: "#ffffff" },
+        links: {
+          color: "#ffffff",
+          distance: 150,
+          enable: true,
+          opacity: 0.2,
+          width: 1
+        },
+        move: {
+          direction: "none",
+          enable: true,
+          outModes: "bounce",
+          speed: 1
+        },
+        number: { value: 50, density: { enable: true, area: 800 } },
+        opacity: { value: 0.5 },
+        shape: { type: "circle" },
+        size: { value: { min: 1, max: 4 } }
+      },
+      detectRetina: true
     });
   </script>
 </body>
 </html>
+
