@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Get Your Key</title>
+  <title>Get Your License Key</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
@@ -28,9 +28,12 @@
     const form = document.getElementById('keyForm');
     const resultDiv = document.getElementById('keyResult');
 
+    // Global Static License Key
+    const globalLicenseKey = 'fasdfdsew-3f9sedikgf9wek5t320dsf-sdfds';
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      resultDiv.className = ''; // Reset class
+      resultDiv.className = '';
       resultDiv.innerHTML = '';
 
       const tokenInput = document.querySelector('input[name="cf-turnstile-response"]');
@@ -42,32 +45,12 @@
         return;
       }
 
-      resultDiv.innerHTML = `<p>Verifying, please wait...</p>`;
-      resultDiv.classList.add('show');
-
-      try {
-        const response = await fetch('/api/get-key', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          resultDiv.className = 'show';
-          resultDiv.innerHTML = `<p><strong>Your Key:</strong> ${data.key}</p>`;
-        } else {
-          resultDiv.className = 'error show';
-          resultDiv.innerHTML = `<p>${data.message}</p>`;
-        }
-      } catch (error) {
-        resultDiv.className = 'error show';
-        resultDiv.innerHTML = `<p>An error occurred while trying to get the key.</p>`;
-      }
+      // Show the global static key after CAPTCHA verification
+      resultDiv.className = 'show';
+      resultDiv.innerHTML = `<p><strong>Your Key:</strong> ${globalLicenseKey}</p>`;
     });
 
-    // tsParticles Config
+    // Particles config
     tsParticles.load("tsparticles", {
       background: { color: "#181818" },
       fpsLimit: 60,
@@ -105,4 +88,5 @@
   </script>
 </body>
 </html>
+
 
